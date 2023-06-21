@@ -206,7 +206,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        Navigator.of(context).pop();
+                        
                         Navigator.pushNamedAndRemoveUntil(
                             context, "/registore", (route) => false);
                       },
