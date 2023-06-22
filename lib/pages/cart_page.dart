@@ -28,7 +28,7 @@ class _CartPageState extends ConsumerState<CartPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Flexible(
+          Flexible(  
             flex: 1,
             child: _cartList(ref),
           )

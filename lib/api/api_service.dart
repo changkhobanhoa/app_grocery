@@ -1,12 +1,11 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_flutter/main.dart';
 import 'package:grocery_flutter/models/cart.dart';
+import 'package:grocery_flutter/models/favorite_user.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:snippet_coder_utils/FormHelper.dart';
 
 import '../config.dart';
 import '../models/category.dart';
@@ -30,12 +29,12 @@ class ApiService {
       'pageSize': pageSize.toString()
     };
 
-    var url = Uri.http(Config.api_URL, Config.category_api, queryString);
+    var url = Uri.http(Config.apiURL, Config.categoryApi, queryString);
     var response = await client.get(url, headers: requestHeaders);
 
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      print(data);
+
       return categoriesFromJson(data["data"]);
     } else {
       return null;
@@ -60,7 +59,7 @@ class ApiService {
       queryString["productIds"] = productFilterModel.productIds!.join(",");
     }
 
-    var url = Uri.http(Config.api_URL, Config.product_api, queryString);
+    var url = Uri.http(Config.apiURL, Config.productApi, queryString);
     var response = await client.get(url, headers: requestHeaders);
 
     if (response.statusCode == 200) {
@@ -74,7 +73,7 @@ class ApiService {
 
   static Future<bool> registerUser(
       String fullName, String email, String password) async {
-    var url = Uri.http(Config.api_URL, Config.register_api);
+    var url = Uri.http(Config.apiURL, Config.registerApi);
 
     var respons = await client.post(
       url,
@@ -91,7 +90,7 @@ class ApiService {
   }
 
   static Future<bool> login(String email, String password) async {
-    var url = Uri.http(Config.api_URL, Config.login_api);
+    var url = Uri.http(Config.apiURL, Config.loginApi);
     var response = await client.post(
       url,
       headers: requestHeaders,
@@ -110,8 +109,8 @@ class ApiService {
 
   Future<List<SliderModel>?> getSliders(page, pageSize) async {
     var url = Uri.http(
-      Config.api_URL,
-      Config.slider_api,
+      Config.apiURL,
+      Config.sliderApi,
     );
 
     var response = await client.get(url, headers: requestHeaders);
@@ -127,7 +126,7 @@ class ApiService {
 
   Future<Product?> getProductDetails(String productId) async {
     try {
-      var url = Uri.http(Config.api_URL, "${Config.product_api}/$productId");
+      var url = Uri.http(Config.apiURL, "${Config.productApi}/$productId");
       var response = await client.get(url, headers: requestHeaders);
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
@@ -136,21 +135,21 @@ class ApiService {
         return null;
       }
     } catch (e) {
-      print(e);
+      return null;
     }
   }
 
-   Future<Cart?> getCart() async {
+  Future<Cart?> getCart() async {
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
       'Authorization': 'Basic ${loginDetails!.data.token.toString()}'
     };
-    var url = Uri.http(Config.api_URL, Config.cart_api);
+    var url = Uri.http(Config.apiURL, Config.cartApi);
     var response = await client.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      print(response.body);
+
       return Cart.fromJson(data["data"]);
     } else if (response.statusCode == 401) {
       navigatorKey.currentState?.pushNamedAndRemoveUntil(
@@ -162,13 +161,14 @@ class ApiService {
     }
     return null;
   }
+
   Future<bool?> addCartItem(productId, qty) async {
     var loginDetails = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
       'Authorization': 'Basic ${loginDetails!.data.token.toString()}'
     };
-    var url = Uri.parse("${Config.imageURL}/${Config.cart_api}");
+    var url = Uri.parse("${Config.imageURL}/${Config.cartApi}");
     var response = await client.post(
       url,
       headers: requestHeaders,
@@ -202,7 +202,7 @@ class ApiService {
       'Content-Type': 'application/json',
       'Authorization': 'Basic ${loginDetails!.data.token.toString()}'
     };
-    var url = Uri.parse("${Config.imageURL}/${Config.cart_api}");
+    var url = Uri.parse("${Config.imageURL}/${Config.cartApi}");
     var response = await client.delete(
       url,
       headers: requestHeaders,
@@ -233,7 +233,7 @@ class ApiService {
       'Content-Type': 'application/json',
       'Authorization': 'Basic ${lodingDetail?.data.token.toString()}'
     };
-    var url = Uri.http(Config.api_URL, Config.order_api);
+    var url = Uri.http(Config.apiURL, Config.orderApi);
     var response = await client.post(
       url,
       headers: requestHeaders,
@@ -260,13 +260,14 @@ class ApiService {
     }
     return resModel;
   }
+
   Future<bool?> updateOrder(orderId, transactionId) async {
     var lodingDetail = await SharedService.loginDetails();
     Map<String, String> requestHeaders = {
       'Content-Type': 'application/json',
       'Authorization': 'Basic ${lodingDetail?.data.token.toString()}'
     };
-    var url = Uri.http(Config.api_URL, Config.order_api);
+    var url = Uri.http(Config.apiURL, Config.orderApi);
     var response = await client.put(
       url,
       headers: requestHeaders,
@@ -283,6 +284,88 @@ class ApiService {
           ?.pushNamedAndRemoveUntil("/login", (route) => false);
     } else {
       return false;
+    }
+    return null;
+  }
+
+  Future<FavoriteUser?> getFavorite() async {
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ${loginDetails!.data.token.toString()}'
+    };
+    var url = Uri.http(Config.apiURL, Config.favoriteApi);
+    var response = await client.get(url, headers: requestHeaders);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+       
+      return FavoriteUser.fromJson(data["data"]);
+    } else if (response.statusCode == 401) {
+      navigatorKey.currentState?.pushNamedAndRemoveUntil(
+        "/login",
+        (route) => false,
+      );
+    } else {
+      return null;
+    }
+    return null;
+  }
+
+  Future<String?> addFavorite(productId) async {
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ${loginDetails!.data.token.toString()}'
+    };
+    var url = Uri.http(Config.apiURL, Config.favoriteApi);
+    var response = await client.post(
+      url,
+      headers: requestHeaders,
+      body: jsonEncode(
+        {
+          "productId": productId,
+        },
+      ),
+    );
+    if (response.statusCode == 200) {
+      return "Success";
+    } else if (response.statusCode == 401) {
+      navigatorKey.currentState?.pushNamedAndRemoveUntil(
+        "/login",
+        (route) => false,
+      );
+    } else {
+        var data = jsonDecode(response.body);
+      return data['message'];
+    }
+    return null;
+  }
+
+  Future<bool?> removeFavorite(productId) async {
+    var loginDetails = await SharedService.loginDetails();
+    Map<String, String> requestHeaders = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Basic ${loginDetails!.data.token.toString()}'
+    };
+    var url = Uri.http(Config.apiURL, Config.favoriteApiDelete);
+    var response = await client.post(
+      url,
+      headers: requestHeaders,
+      body: jsonEncode(
+        {
+          "productId": productId,
+        },
+      ),
+    );
+    if (response.statusCode == 200) {
+      return true;
+    } else if (response.statusCode == 401) {
+      navigatorKey.currentState?.pushNamedAndRemoveUntil(
+        "/login",
+        (route) => false,
+      );
+    } else {
+      return null;
     }
     return null;
   }

@@ -35,11 +35,11 @@ extension ProductExt on Product {
     double disPercent = 0;
 
     if (!productPrice.isNaN) {
-      double regular_price = productPrice;
-      double sale_price =
-          productSalePrice > 0 ? productSalePrice : regular_price;
-      double discount = regular_price - sale_price;
-      disPercent = (discount / regular_price) * 100;
+      double regularPrice = productPrice;
+      double salePrice =
+          productSalePrice > 0 ? productSalePrice : regularPrice;
+      double discount = regularPrice - salePrice;
+      disPercent = (discount / regularPrice) * 100;
     }
     return disPercent.round();
   }

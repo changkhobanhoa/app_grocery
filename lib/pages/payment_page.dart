@@ -222,7 +222,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
                         // ignore: use_build_context_synchronously
                         FormHelper.showSimpleAlertDialog(
                           context,
-                          Config.app_name,
+                          Config.appName,
                           orderPaymetnResponseModel.message,
                           "Ok",
                           () {

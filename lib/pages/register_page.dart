@@ -268,7 +268,7 @@ class _RegisterState extends State<RegisterPage> {
                   if (response) {
                     FormHelper.showSimpleAlertDialog(
                       context,
-                      Config.app_name,
+                      Config.appName,
                       "Registration completed SuccessFully",
                       "Ok",
                       () {
@@ -278,7 +278,7 @@ class _RegisterState extends State<RegisterPage> {
                   } else {
                     FormHelper.showSimpleAlertDialog(
                       context,
-                      Config.app_name,
+                      Config.appName,
                       "This E-mail already registered",
                       "Ok",
                       () {

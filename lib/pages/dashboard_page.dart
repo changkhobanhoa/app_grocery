@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_flutter/pages/profile_page.dart';
+import '/pages/favorite_page.dart';
+import '/pages/profile_page.dart';
 
 import 'cart_page.dart';
 import 'home_page.dart';
@@ -16,7 +17,7 @@ class _DashboardPageState extends State<DashboardPage> {
   final List<Widget> widgetList = const [
     HomePage(),
     CartPage(),
-    HomePage(),
+    FavoritePage(),
     ProfilePage(),
   ];
 

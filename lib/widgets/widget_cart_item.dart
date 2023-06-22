@@ -22,10 +22,9 @@ class CartItemWidget extends StatelessWidget {
     return Card(
       elevation: 0,
       borderOnForeground: true,
-      margin: const EdgeInsets.all(10),
       child: Container(
-        height: 140,
-        padding: const EdgeInsets.all(10),
+        height: 120,
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
         decoration: const BoxDecoration(
           border: Border(
             top: BorderSide(color: Colors.grey, width: 1),
@@ -43,21 +42,47 @@ class CartItemWidget extends StatelessWidget {
   Widget cartItemUI(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 10, 5),
-          child: Container(
-            width: 100,
-            alignment: Alignment.center,
-            child: Image.network(
-              model.product.productImage != ""
-                  ? model.product.fullImagePath
-                  : "",
-              height: 100,
-              fit: BoxFit.contain,
-            ),
-          ),
-        ),
+        Stack(children: [
+          Column(
+            children: [
+              Visibility(
+                visible: model.product.calculateDiscount > 0,
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: const BoxDecoration(
+                      color: Colors.green,
+                    ),
+                    child: Text(
+                      "${model.product.calculateDiscount}% OFF",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                  child: GestureDetector(
+                child: Container(
+                  width: 100,
+                  child: Image.network(
+                    model.product.productImage != ""
+                        ? model.product.fullImagePath
+                        : "",
+                    height: 100,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ))
+            ],
+          )
+        ]),
         SizedBox(
           width: 230,
           child: Column(
@@ -68,15 +93,36 @@ class CartItemWidget extends StatelessWidget {
                 model.product.productName,
                 style: const TextStyle(
                   color: Colors.black,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text(
-                "${Config.currency}${model.product.productPrice}",
-                style: const TextStyle(
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  Text(
+                    "${model.product.productPrice.toString()} ${Config.currency}",
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: model.product.calculateDiscount > 0
+                          ? Colors.red
+                          : Colors.black,
+                      decoration: model.product.productSalePrice > 0
+                          ? TextDecoration.lineThrough
+                          : null,
+                    ),
+                  ),
+                  Text(
+                    (model.product.calculateDiscount > 0)
+                        ? " ${model.product.productSalePrice.toString()} ${Config.currency}"
+                        : "",
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,7 +144,6 @@ class CartItemWidget extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         onItemRemove!(model);
-                        
                       },
                       child: const Icon(
                         Icons.delete,

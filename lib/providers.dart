@@ -1,9 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grocery_flutter/application/notifier/order_payment_notifier.dart';
-import 'package:grocery_flutter/application/state/order_payment_state.dart';
-import 'package:grocery_flutter/models/product.dart';
-import 'package:grocery_flutter/models/product_filter.dart';
-import 'package:grocery_flutter/models/slider.model.dart';
+import '/application/notifier/favorite_notifier.dart';
+import '/application/notifier/order_payment_notifier.dart';
+import '/application/state/favorite_state.dart';
+import '/application/state/order_payment_state.dart';
+import '/models/product.dart';
+import '/models/product_filter.dart';
+import '/models/slider.model.dart';
 
 import 'api/api_service.dart';
 import 'application/notifier/cart_notifier.dart';
@@ -68,8 +70,11 @@ final cartItemsProvider = StateNotifierProvider<CartNotifier, CartState>(
   (ref) => CartNotifier(ref.watch(apiService)),
 );
 
-
 final orderPaymentProvider =
     StateNotifierProvider<OrderPaymentNotifier, OrderPaymentState>(
   (ref) => OrderPaymentNotifier(ref.watch(apiService)),
 );
+
+final favoriteItemProvider =
+    StateNotifierProvider<FavoriteNotifier, FavoriteState>(
+        (ref) => FavoriteNotifier(ref.watch(apiService)));

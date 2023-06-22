@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../config.dart';
 import '../models/product.dart';
- 
 
 class ProductCard extends StatelessWidget {
-  final Product? model;
-  const ProductCard({super.key, this.model});
+ final Function addFavorite;
+  final Product model;
+  const ProductCard({super.key, required this.model, required this.addFavorite});
 
   @override
   Widget build(BuildContext context) {
-    print(model!.relatedProducts);
+ 
     return Container(
       width: 150,
       decoration: const BoxDecoration(color: Colors.white),
@@ -22,7 +22,7 @@ class ProductCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Visibility(
-                visible: model!.calculateDiscount > 0,
+                visible: model.calculateDiscount > 0,
                 child: Align(
                   alignment: Alignment.topLeft,
                   child: Container(
@@ -31,7 +31,7 @@ class ProductCard extends StatelessWidget {
                       color: Colors.green,
                     ),
                     child: Text(
-                      "${model!.calculateDiscount}% OFF",
+                      "${model.calculateDiscount}% OFF",
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -43,22 +43,22 @@ class ProductCard extends StatelessWidget {
               ),
               GestureDetector(
                 child: SizedBox(
-                  child: Image.network(
-                    model!.fullImagePath,
-                    fit: BoxFit.cover,
-                  ),
                   height: 100,
                   width: MediaQuery.of(context).size.width,
+                  child: Image.network(
+                    model.fullImagePath,
+                    fit: BoxFit.cover,
+                  ),
                 ),
                 onTap: () {
                   Navigator.of(context).pushNamed("/product-details",
-                      arguments: {'productId': model!.productId});
+                      arguments: {'productId': model.productId});
                 },
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8, left: 10),
                 child: Text(
-                  model!.productName,
+                  model.productName,
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -78,22 +78,22 @@ class ProductCard extends StatelessWidget {
                       child: Row(
                         children: [
                           Text(
-                            "${Config.currency}${model!.productPrice.toString()}",
+                            "${Config.currency}${model.productPrice.toString()}",
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               fontSize: 12,
-                              color: model!.calculateDiscount > 0
+                              color: model.calculateDiscount > 0
                                   ? Colors.red
                                   : Colors.black,
                               fontWeight: FontWeight.bold,
-                              decoration: model!.productSalePrice > 0
+                              decoration: model.productSalePrice > 0
                                   ? TextDecoration.lineThrough
                                   : null,
                             ),
                           ),
                           Text(
-                            (model!.calculateDiscount > 0)
-                                ? " ${model!.productSalePrice.toString()}"
+                            (model.calculateDiscount > 0)
+                                ? " ${model.productSalePrice.toString()}"
                                 : "",
                             textAlign: TextAlign.left,
                             style: const TextStyle(
@@ -106,12 +106,14 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                      child: const Icon(
+                      onTap: (){
+                       addFavorite(model.productId) ;
+                      },
+                      child:  const   Icon(
                         Icons.favorite,
-                        color: Colors.grey,
+                      color:  Colors.grey,
                         size: 20,
                       ),
-                      onTap: () {},
                     )
                   ],
                 ),

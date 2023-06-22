@@ -164,8 +164,13 @@ class _ProductList extends ConsumerWidget {
                   productState.products.length,
                   (index) {
                     return ProductCard(
-                      model: productState.products[index],
-                    );
+                        model: productState.products[index],
+                        addFavorite: (productId) async {
+                          final favoriteModel =
+                              ref.read(favoriteItemProvider.notifier);
+                          await favoriteModel.addFavoriteItem(productId);
+                          final favoriteState = ref.watch(favoriteItemProvider);
+                        });
                   },
                 ),
               ),

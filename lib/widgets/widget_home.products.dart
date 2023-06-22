@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 
 import '../components/productCart.dart';
 import '../models/pagination.dart';
 import '../models/product.dart';
 import '../models/product_filter.dart';
 import '../providers.dart';
+
 class HomeProductsWidget extends ConsumerWidget {
   const HomeProductsWidget({super.key});
 
@@ -47,7 +49,7 @@ class HomeProductsWidget extends ConsumerWidget {
 
     return products.when(
         data: (list) {
-          return _builProductList(list!);
+          return _builProductList(list!, ref);
         },
         error: (_, __) {
           return const Center(child: Text("ERROR"));
@@ -55,7 +57,7 @@ class HomeProductsWidget extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()));
   }
 
-  Widget _builProductList(List<Product> product) {
+  Widget _builProductList(List<Product> product, WidgetRef ref) {
     return Container(
       height: 200,
       alignment: Alignment.centerLeft,
@@ -69,6 +71,19 @@ class HomeProductsWidget extends ConsumerWidget {
             onTap: () {},
             child: ProductCard(
               model: data,
+              addFavorite: (productId) async {
+                final favoriteModel = ref.read(favoriteItemProvider.notifier);
+                await favoriteModel.addFavoriteItem(productId);
+                final favoriteState = ref.watch(favoriteItemProvider);
+favoriteState.err ?? AnimatedSnackBar.rectangle('Success', favoriteState.err ?? "",
+                        type: AnimatedSnackBarType.success,
+                        brightness: Brightness.light,
+                        mobileSnackBarPosition: MobileSnackBarPosition.bottom,
+                        duration: const Duration(milliseconds: 2))
+                    .show(
+                  ref.context,
+                );
+              },
             ),
           );
         },

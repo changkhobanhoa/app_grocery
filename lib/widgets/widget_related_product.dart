@@ -24,7 +24,7 @@ class RelatedProductWidget extends ConsumerWidget {
         ),
         Visibility(
           // relatedProduct?.where((e) => e != null).toList().isEmpty ??
-          visible:   relatedProduct.isNotEmpty   ,
+          visible: relatedProduct.isNotEmpty,
           child: _productList(ref),
         )
       ],
@@ -32,7 +32,7 @@ class RelatedProductWidget extends ConsumerWidget {
   }
 
   Widget _productList(WidgetRef ref) {
-    print("relatedProduct =  ${relatedProduct}");
+    
     final products = ref.watch(
       relatedProductsProvider(
         ProductFilterModel(
@@ -46,7 +46,7 @@ class RelatedProductWidget extends ConsumerWidget {
     );
     return products.when(
       data: (list) {
-        return _buildProductList(list!);
+        return _buildProductList(list!, ref);
       },
       error: (_, __) => const Center(
         child: Text("Error"),
@@ -57,7 +57,7 @@ class RelatedProductWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildProductList(List<Product> product) {
+  Widget _buildProductList(List<Product> product, WidgetRef ref) {
     return Container(
       height: 200,
       alignment: Alignment.centerLeft,
@@ -72,6 +72,12 @@ class RelatedProductWidget extends ConsumerWidget {
             onTap: () {},
             child: ProductCard(
               model: data,
+              addFavorite: (productId) async {
+                final favoriteModel = ref.read(favoriteItemProvider.notifier);
+                await favoriteModel.addFavoriteItem(productId);
+                final favoriteState = ref.watch(favoriteItemProvider);
+                favoriteState.err!= null ? "":"";
+              },
             ),
           );
         },

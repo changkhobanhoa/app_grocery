@@ -158,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                       if (res) {
                         FormHelper.showSimpleAlertDialog(
                           context,
-                          Config.app_name,
+                          Config.appName,
                           "User Logged-In Successfully",
                           "Ok",
                           () {
@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
                       } else {
                         FormHelper.showSimpleAlertDialog(
                           context,
-                          Config.app_name,
+                          Config.appName,
                           "Invalid Email/Password",
                           "Ok",
                           () {

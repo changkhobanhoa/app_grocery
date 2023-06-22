@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grocery_flutter/components/widget_col_exp.dart';
-import 'package:grocery_flutter/providers.dart';
+import '/components/widget_col_exp.dart';
+import '/providers.dart';
 
 import '../components/widget_custom_stepper.dart';
 import '../config.dart';
