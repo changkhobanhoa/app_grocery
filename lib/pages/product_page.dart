@@ -17,12 +17,23 @@ class ProductPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductPage> {
   String? categoryId;
   String? categoryName;
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+         flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [const Color.fromARGB(255, 58, 183, 137), Colors.purple.shade300],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         title: const Text("Sản phẩm"),
+        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
       ),
       body: Container(
         color: Colors.grey[100],

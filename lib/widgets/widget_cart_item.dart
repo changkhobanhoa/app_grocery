@@ -19,7 +19,6 @@ class CartItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Card(
       elevation: 0,
       borderOnForeground: true,
@@ -72,7 +71,7 @@ class CartItemWidget extends StatelessWidget {
               ),
               Expanded(
                   child: GestureDetector(
-                child: Container(
+                child: SizedBox(
                   width: 100,
                   child: Image.network(
                     model.product.productImage != ""
@@ -86,77 +85,82 @@ class CartItemWidget extends StatelessWidget {
             ],
           )
         ]),
-        SizedBox(
-          width: size.width - 120,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                model.product.productName,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/product-details', arguments: {'productId': model.product.productId});
+          },
+          child: SizedBox(
+            width: size.width - 120,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  model.product.productName,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              Row(
-                children: [
-                  Text(
-                    formatVnd(model.product.productPrice),
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: model.product.calculateDiscount > 0
-                          ? Colors.red
-                          : Colors.black,
-                      decoration: model.product.productSalePrice > 0
-                          ? TextDecoration.lineThrough
-                          : null,
-                    ),
-                  ),
-                  Text(
-                    (model.product.calculateDiscount > 0)
-                        ? " ${formatVnd(model.product.productSalePrice) }"
-                        : "",
-                    textAlign: TextAlign.left,
-                    style: const TextStyle(
+                Row(
+                  children: [
+                    Text(
+                      formatVnd(model.product.productPrice),
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
                         fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CustomStepper(
-                    lowerLimit: 1,
-                    upperLimit: 20,
-                    stepValue: 1,
-                    iconSize: 15.0,
-                    value: model.qty.toInt(),
-                    onChanged: (value) {
-                      onQtyUpdate!(model, value["qty"], value["type"]);
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        onItemRemove!(model);
-                      },
-                      child: const Icon(
-                        Icons.delete,
-                        color: Colors.red,
+                        color: model.product.calculateDiscount > 0
+                            ? Colors.red
+                            : Colors.black,
+                        decoration: model.product.productSalePrice > 0
+                            ? TextDecoration.lineThrough
+                            : null,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    Text(
+                      (model.product.calculateDiscount > 0)
+                          ? " ${formatVnd(model.product.productSalePrice)}"
+                          : "",
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CustomStepper(
+                      lowerLimit: 1,
+                      upperLimit: 20,
+                      stepValue: 1,
+                      iconSize: 15.0,
+                      value: model.qty.toInt(),
+                      onChanged: (value) {
+                        onQtyUpdate!(model, value["qty"], value["type"]);
+                      },
+                    ),
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          onItemRemove!(model);
+                        },
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ],

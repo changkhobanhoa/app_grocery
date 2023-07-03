@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:js';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_flutter/main.dart';
 import 'package:grocery_flutter/models/cart.dart';
 import 'package:grocery_flutter/models/favorite_user.dart';
+import 'package:grocery_flutter/models/user.model.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -106,6 +109,7 @@ class ApiService {
       return false;
     }
   }
+   
 
   Future<List<SliderModel>?> getSliders(page, pageSize) async {
     var url = Uri.http(
@@ -138,6 +142,7 @@ class ApiService {
       return null;
     }
   }
+   
 
   Future<Cart?> getCart() async {
     var loginDetails = await SharedService.loginDetails();
@@ -149,11 +154,18 @@ class ApiService {
     var response = await client.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-      if(data==null){
+      if (data == null) {
         return null;
       }
       return Cart.fromJson(data["data"]);
     } else if (response.statusCode == 401) {
+      const snackBar = SnackBar(
+        content: Text('Vui lòng đăng nhập để xem giỏ hàng'),
+      );
+
+// Find the ScaffoldMessenger in the widget tree
+// and use it to show a SnackBar.
+      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(snackBar);
       navigatorKey.currentState?.pushNamedAndRemoveUntil(
         "/login",
         (route) => false,
@@ -300,7 +312,7 @@ class ApiService {
     var response = await client.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-       
+
       return FavoriteUser.fromJson(data["data"]);
     } else if (response.statusCode == 401) {
       navigatorKey.currentState?.pushNamedAndRemoveUntil(
@@ -337,7 +349,7 @@ class ApiService {
         (route) => false,
       );
     } else {
-        var data = jsonDecode(response.body);
+      var data = jsonDecode(response.body);
       return data['message'];
     }
     return null;

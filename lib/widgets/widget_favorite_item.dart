@@ -30,50 +30,55 @@ class FavoriteItemWidget extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      model.product.productName,
-                      style: const TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
+              child: GestureDetector(
+                onTap: (){
+                  Navigator.pushNamed(context,"/product-details",arguments:{'productId':model.product.productId});
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        model.product.productName,
+                        style: const TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          "${Config.currency}${model.product.productPrice.toString()}",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: model.product.calculateDiscount > 0
-                                ? Colors.red
-                                : Colors.black,
-                            decoration: model.product.productSalePrice > 0
-                                ? TextDecoration.lineThrough
-                                : null,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "${Config.currency}${model.product.productPrice.toString()}",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: model.product.calculateDiscount > 0
+                                  ? Colors.red
+                                  : Colors.black,
+                              decoration: model.product.productSalePrice > 0
+                                  ? TextDecoration.lineThrough
+                                  : null,
+                            ),
                           ),
-                        ),
-                        Text(
-                          (model.product.calculateDiscount > 0)
-                              ? " ${Config.currency}${model.product.productSalePrice.toString()}"
-                              : "",
-                          textAlign: TextAlign.left,
-                          style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ],
+                          Text(
+                            (model.product.calculateDiscount > 0)
+                                ? " ${Config.currency}${model.product.productSalePrice.toString()}"
+                                : "",
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             IconButton(

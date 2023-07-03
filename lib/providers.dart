@@ -15,6 +15,7 @@ import 'application/state/cart_state.dart';
 import 'application/state/product_state.dart';
 import 'models/category.dart';
 import 'models/pagination.dart';
+import 'models/user.model.dart';
 
 final categoriesProvider =
     FutureProvider.family<List<Category>?, PaginationModel>(
@@ -44,6 +45,7 @@ final productNotifierProvider =
     ref.watch(productFilterProvider),
   ),
 );
+ 
 
 final sliderProvider =
     FutureProvider.family<List<SliderModel>?, PaginationModel>(
@@ -78,3 +80,6 @@ final orderPaymentProvider =
 final favoriteItemProvider =
     StateNotifierProvider<FavoriteNotifier, FavoriteState>(
         (ref) => FavoriteNotifier(ref.watch(apiService)));
+
+
+        
