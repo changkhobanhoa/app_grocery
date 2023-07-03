@@ -19,11 +19,12 @@ class CartItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return Card(
       elevation: 0,
       borderOnForeground: true,
       child: Container(
-        height: 120,
+        height: 150,
         padding: const EdgeInsets.only(top: 10, bottom: 10),
         decoration: const BoxDecoration(
           border: Border(
@@ -40,6 +41,8 @@ class CartItemWidget extends StatelessWidget {
   }
 
   Widget cartItemUI(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -84,7 +87,7 @@ class CartItemWidget extends StatelessWidget {
           )
         ]),
         SizedBox(
-          width: 230,
+          width: size.width - 120,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,7 +103,7 @@ class CartItemWidget extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "${model.product.productPrice.toString()} ${Config.currency}",
+                    formatVnd(model.product.productPrice),
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontSize: 16,
@@ -114,7 +117,7 @@ class CartItemWidget extends StatelessWidget {
                   ),
                   Text(
                     (model.product.calculateDiscount > 0)
-                        ? " ${model.product.productSalePrice.toString()} ${Config.currency}"
+                        ? " ${formatVnd(model.product.productSalePrice) }"
                         : "",
                     textAlign: TextAlign.left,
                     style: const TextStyle(

@@ -247,7 +247,7 @@ class _RegisterState extends State<RegisterPage> {
           height: 10,
         ),
         Center(
-          child: FormHelper.submitButton("Sign Up", () {
+          child: FormHelper.submitButton("Đăng ký", () {
             if (validateSave()) {
               // Api Request
               setState(() {
@@ -269,17 +269,19 @@ class _RegisterState extends State<RegisterPage> {
                     FormHelper.showSimpleAlertDialog(
                       context,
                       Config.appName,
-                      "Registration completed SuccessFully",
+                      "Đăng ký thành công",
                       "Ok",
                       () {
                         Navigator.of(context).pop();
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, "/login", (route) => false);
                       },
                     );
                   } else {
                     FormHelper.showSimpleAlertDialog(
                       context,
                       Config.appName,
-                      "This E-mail already registered",
+                      "Email đã được đăng ký",
                       "Ok",
                       () {
                         Navigator.of(context).pop();
@@ -302,7 +304,7 @@ class _RegisterState extends State<RegisterPage> {
           child: RichText(
             text: TextSpan(
               children: <TextSpan>[
-                const TextSpan(text: "Already have an acount?"),
+                const TextSpan(text: "Đã có tài khoản?"),
                 TextSpan(
                   text: "Sign In",
                   style: const TextStyle(

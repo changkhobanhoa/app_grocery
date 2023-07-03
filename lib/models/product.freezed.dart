@@ -21,7 +21,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Product {
   String get productName => throw _privateConstructorUsedError;
-  Category get category => throw _privateConstructorUsedError;
+  Category? get category => throw _privateConstructorUsedError;
   String? get productShortDescription => throw _privateConstructorUsedError;
   String? get productDescription => throw _privateConstructorUsedError;
   double get productPrice => throw _privateConstructorUsedError;
@@ -45,7 +45,7 @@ abstract class $ProductCopyWith<$Res> {
   @useResult
   $Res call(
       {String productName,
-      Category category,
+      Category? category,
       String? productShortDescription,
       String? productDescription,
       double productPrice,
@@ -57,7 +57,7 @@ abstract class $ProductCopyWith<$Res> {
       String productId,
       List<String>? relatedProducts});
 
-  $CategoryCopyWith<$Res> get category;
+  $CategoryCopyWith<$Res>? get category;
 }
 
 /// @nodoc
@@ -74,7 +74,7 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
   @override
   $Res call({
     Object? productName = null,
-    Object? category = null,
+    Object? category = freezed,
     Object? productShortDescription = freezed,
     Object? productDescription = freezed,
     Object? productPrice = null,
@@ -91,10 +91,10 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
           ? _value.productName
           : productName // ignore: cast_nullable_to_non_nullable
               as String,
-      category: null == category
+      category: freezed == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as Category,
+              as Category?,
       productShortDescription: freezed == productShortDescription
           ? _value.productShortDescription
           : productShortDescription // ignore: cast_nullable_to_non_nullable
@@ -140,8 +140,12 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
 
   @override
   @pragma('vm:prefer-inline')
-  $CategoryCopyWith<$Res> get category {
-    return $CategoryCopyWith<$Res>(_value.category, (value) {
+  $CategoryCopyWith<$Res>? get category {
+    if (_value.category == null) {
+      return null;
+    }
+
+    return $CategoryCopyWith<$Res>(_value.category!, (value) {
       return _then(_value.copyWith(category: value) as $Val);
     });
   }
@@ -156,7 +160,7 @@ abstract class _$$_ProductCopyWith<$Res> implements $ProductCopyWith<$Res> {
   @useResult
   $Res call(
       {String productName,
-      Category category,
+      Category? category,
       String? productShortDescription,
       String? productDescription,
       double productPrice,
@@ -169,7 +173,7 @@ abstract class _$$_ProductCopyWith<$Res> implements $ProductCopyWith<$Res> {
       List<String>? relatedProducts});
 
   @override
-  $CategoryCopyWith<$Res> get category;
+  $CategoryCopyWith<$Res>? get category;
 }
 
 /// @nodoc
@@ -183,7 +187,7 @@ class __$$_ProductCopyWithImpl<$Res>
   @override
   $Res call({
     Object? productName = null,
-    Object? category = null,
+    Object? category = freezed,
     Object? productShortDescription = freezed,
     Object? productDescription = freezed,
     Object? productPrice = null,
@@ -200,10 +204,10 @@ class __$$_ProductCopyWithImpl<$Res>
           ? _value.productName
           : productName // ignore: cast_nullable_to_non_nullable
               as String,
-      category: null == category
+      category: freezed == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
-              as Category,
+              as Category?,
       productShortDescription: freezed == productShortDescription
           ? _value.productShortDescription
           : productShortDescription // ignore: cast_nullable_to_non_nullable
@@ -272,7 +276,7 @@ class _$_Product implements _Product {
   @override
   final String productName;
   @override
-  final Category category;
+  final Category? category;
   @override
   final String? productShortDescription;
   @override
@@ -372,7 +376,7 @@ class _$_Product implements _Product {
 abstract class _Product implements Product {
   factory _Product(
       {required final String productName,
-      required final Category category,
+      required final Category? category,
       required final String? productShortDescription,
       required final String? productDescription,
       required final double productPrice,
@@ -389,7 +393,7 @@ abstract class _Product implements Product {
   @override
   String get productName;
   @override
-  Category get category;
+  Category? get category;
   @override
   String? get productShortDescription;
   @override

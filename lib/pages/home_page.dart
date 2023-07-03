@@ -12,13 +12,14 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Home Page"),
+        centerTitle: true,
+        title: const Text("Trang Chủ"),
         actions: [
           IconButton(
             onPressed: () {
                   SharedService.logout(context);
             },
-            icon: const Icon(Icons.logout_outlined),
+            icon: const Icon(Icons.logout),
           )
         ],
       ),
@@ -27,7 +28,7 @@ class HomePage extends StatelessWidget {
           HomeSliderWidget(),
           HomeCategoriesWidget(),
           HomeProductsWidget(),
-          // ProductCard(model: model),
+          
         ],
       ),
     );

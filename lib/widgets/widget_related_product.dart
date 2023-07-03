@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../components/productCart.dart';
+import '../models/favorite.dart';
 import '../models/pagination.dart';
 import '../models/product.dart';
 import '../models/product_filter.dart';
@@ -32,7 +33,6 @@ class RelatedProductWidget extends ConsumerWidget {
   }
 
   Widget _productList(WidgetRef ref) {
-    
     final products = ref.watch(
       relatedProductsProvider(
         ProductFilterModel(
@@ -44,9 +44,11 @@ class RelatedProductWidget extends ConsumerWidget {
         ),
       ),
     );
+    final favorites = ref.watch(favoriteItemProvider);
     return products.when(
       data: (list) {
-        return _buildProductList(list!, ref);
+        return _buildProductList(
+            list!, favorites.favoriteModel!.favorites, ref);
       },
       error: (_, __) => const Center(
         child: Text("Error"),
@@ -57,7 +59,8 @@ class RelatedProductWidget extends ConsumerWidget {
     );
   }
 
-  Widget _buildProductList(List<Product> product, WidgetRef ref) {
+  Widget _buildProductList(
+      List<Product> product, List<Favorite> favorite, WidgetRef ref) {
     return Container(
       height: 200,
       alignment: Alignment.centerLeft,
@@ -68,15 +71,36 @@ class RelatedProductWidget extends ConsumerWidget {
         itemCount: product.length,
         itemBuilder: (context, index) {
           var data = product[index];
+          var check = 0;
+          if (favorite.isEmpty) {
+          } else {
+            favorite.map((e) {
+              if (e.product.productId == data.productId) {
+                check = 1;
+              }
+            });
+          }
+
           return GestureDetector(
             onTap: () {},
             child: ProductCard(
               model: data,
+              checkFavorite: check == 0
+                  ? const Icon(
+                      Icons.favorite,
+                      color: Colors.grey,
+                      size: 20,
+                    )
+                  : const Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                      size: 20,
+                    ),
               addFavorite: (productId) async {
                 final favoriteModel = ref.read(favoriteItemProvider.notifier);
                 await favoriteModel.addFavoriteItem(productId);
                 final favoriteState = ref.watch(favoriteItemProvider);
-                favoriteState.err!= null ? "":"";
+                favoriteState.err != null ? "" : "";
               },
             ),
           );

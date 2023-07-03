@@ -6,7 +6,9 @@ import '../config.dart';
 
 class FavoriteItemWidget extends StatelessWidget {
   final Favorite model;
-  const FavoriteItemWidget({Key? key, required this.model}) : super(key: key);
+  final Function? onItemRemove;
+
+  const FavoriteItemWidget({Key? key, required this.model, this.onItemRemove}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +79,7 @@ class FavoriteItemWidget extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.remove),
               onPressed: () {
-                // Perform remove action here
+              onItemRemove!(model.product.productId);
               },
             ),
           ],

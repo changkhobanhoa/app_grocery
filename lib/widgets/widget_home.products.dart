@@ -1,6 +1,7 @@
+ 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:grocery_flutter/models/favorite.dart';
 
 import '../components/productCart.dart';
 import '../models/pagination.dart';
@@ -17,9 +18,9 @@ class HomeProductsWidget extends ConsumerWidget {
       color: const Color(0xffF4F7FA),
       child: Column(
         children: [
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
+            children: [
               Padding(
                 padding: EdgeInsets.only(left: 16, top: 15),
                 child: Text(
@@ -46,10 +47,15 @@ class HomeProductsWidget extends ConsumerWidget {
         ),
       ),
     );
+    final favorites = ref.watch(favoriteItemProvider);
 
     return products.when(
         data: (list) {
-          return _builProductList(list!, ref);
+          if (favorites==null) {
+            return _builProductList1(list!, ref);
+          }
+          return _builProductList(
+              list!, favorites.favoriteModel!.favorites, ref);
         },
         error: (_, __) {
           return const Center(child: Text("ERROR"));
@@ -57,7 +63,7 @@ class HomeProductsWidget extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()));
   }
 
-  Widget _builProductList(List<Product> product, WidgetRef ref) {
+  Widget _builProductList1(List<Product> product, WidgetRef ref) {
     return Container(
       height: 200,
       alignment: Alignment.centerLeft,
@@ -67,23 +73,65 @@ class HomeProductsWidget extends ConsumerWidget {
         itemCount: product.length,
         itemBuilder: (context, index) {
           var data = product[index];
+
+          return GestureDetector(
+            onTap: () {},
+            child: ProductCard(
+                model: data,
+                addFavorite: (productId) {
+                  final favoriteModel = ref.read(favoriteItemProvider.notifier);
+                  favoriteModel.addFavoriteItem(productId);
+                },
+                checkFavorite: const Icon(
+                  Icons.favorite,
+                  color: Colors.grey,
+                  size: 20,
+                )),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _builProductList(
+      List<Product> product, List<Favorite>? favorite, WidgetRef ref) {
+    return Container(
+      height: 200,
+      alignment: Alignment.centerLeft,
+      child: ListView.builder(
+        physics: const ClampingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        itemCount: product.length,
+        itemBuilder: (context, index) {
+          var data = product[index];
+          var check = 0;
+          if (favorite!.isEmpty) {
+          } else {
+            favorite.map((e) {
+              if (e.product.productId == data.productId) {
+                check = 1;
+              }
+            });
+          }
           return GestureDetector(
             onTap: () {},
             child: ProductCard(
               model: data,
-              addFavorite: (productId) async {
+              addFavorite: (productId) {
                 final favoriteModel = ref.read(favoriteItemProvider.notifier);
-                await favoriteModel.addFavoriteItem(productId);
-                final favoriteState = ref.watch(favoriteItemProvider);
-favoriteState.err ?? AnimatedSnackBar.rectangle('Success', favoriteState.err ?? "",
-                        type: AnimatedSnackBarType.success,
-                        brightness: Brightness.light,
-                        mobileSnackBarPosition: MobileSnackBarPosition.bottom,
-                        duration: const Duration(milliseconds: 2))
-                    .show(
-                  ref.context,
-                );
+                favoriteModel.addFavoriteItem(productId);
               },
+              checkFavorite: check == 0
+                  ? const Icon(
+                      Icons.favorite,
+                      color: Colors.grey,
+                      size: 20,
+                    )
+                  : const Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                      size: 20,
+                    ),
             ),
           );
         },

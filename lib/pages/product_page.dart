@@ -1,39 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '/components/productCart.dart';
 
-import '../components/productCart.dart';
 import '../models/pagination.dart';
 import '../models/product_filter.dart';
 import '../models/product_sort.dart';
 import '../providers.dart';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage({Key? key}) : super(key: key);
+  const ProductPage({super.key});
 
   @override
-  State<ProductPage> createState() => _ProductPageState();
+  State<ProductPage> createState() => _ProductsPageState();
 }
 
-class _ProductPageState extends State<ProductPage> {
+class _ProductsPageState extends State<ProductPage> {
   String? categoryId;
   String? categoryName;
-  @override
-  void didChangeDependencies() {
-    final Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
-
-    categoryName = arguments['categoryName'];
-    categoryId = arguments['categoryId'];
-
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Products"),
+        title: const Text("Sản phẩm"),
       ),
       body: Container(
+        color: Colors.grey[100],
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,21 +43,33 @@ class _ProductPageState extends State<ProductPage> {
       ),
     );
   }
+
+  @override
+  void didChangeDependencies() {
+    final Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+
+    categoryName = arguments['categoryName'];
+    categoryId = arguments['categoryId'];
+
+    super.didChangeDependencies();
+  }
 }
 
 class _ProductFilter extends ConsumerWidget {
   final _sortByOption = [
     ProductSortModel(value: "createdAt", label: "Latest"),
-    ProductSortModel(value: "-productPrice", label: "Price: High to Low"),
-    ProductSortModel(value: "productPrice", label: "Price: Low to High"),
+    ProductSortModel(value: "-product_price", label: "Price: High to Low"),
+    ProductSortModel(value: "product_price", label: "Price: Low to High"),
   ];
 
-  final String? categoryName;
-  final String? categoryId;
   _ProductFilter({
     this.categoryName,
     this.categoryId,
   });
+
+  final String? categoryName;
+  final String? categoryId;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final filterProvider = ref.watch(productFilterProvider);
@@ -125,6 +129,7 @@ class _ProductList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final productState = ref.watch(productNotifierProvider);
+    final favorite = ref.watch(favoriteItemProvider);
 
     _scrollController.addListener(
       () {
@@ -163,14 +168,28 @@ class _ProductList extends ConsumerWidget {
                 children: List.generate(
                   productState.products.length,
                   (index) {
+                    int check = 0;
+                    favorite.favoriteModel!.favorites.map((e) {
+                      if (e.product.productId ==
+                          productState.products[index].productId) {
+                        check = 1;
+                      }
+                      ;
+                    });
                     return ProductCard(
-                        model: productState.products[index],
-                        addFavorite: (productId) async {
-                          final favoriteModel =
-                              ref.read(favoriteItemProvider.notifier);
-                          await favoriteModel.addFavoriteItem(productId);
-                          final favoriteState = ref.watch(favoriteItemProvider);
-                        });
+                      checkFavorite: check == 0
+                          ? const Icon(
+                              Icons.favorite,
+                              color: Colors.grey,
+                              size: 20,
+                            )
+                          : const Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                              size: 20,
+                            ),
+                      model: productState.products[index],
+                    );
                   },
                 ),
               ),

@@ -23,7 +23,7 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Product Detail"),
+        title: const Text("Chi tiết sản phẩm"),
       ),
       body: SingleChildScrollView(
         child: _productDatails(ref),
@@ -47,13 +47,13 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
 
     return details.when(
       data: (model) {
-        print(model!.relatedProducts);
+       
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _productDetailsUI(model),
+            _productDetailsUI(model!),
             RelatedProductWidget(model.relatedProducts!),
             const SizedBox(
               height: 10,
@@ -101,7 +101,7 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
               Row(
                 children: [
                   Text(
-                    "${Config.currency}${model.productPrice.toString()}",
+                  formatVnd(model.productPrice),
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontSize: 20,
@@ -115,7 +115,7 @@ class _ProductDetailsPageState extends ConsumerState<ProductDetailsPage> {
                   ),
                   Text(
                     (model.calculateDiscount > 0)
-                        ? " ${Config.currency}${model.productSalePrice.toString()}"
+                        ? " ${ formatVnd(model.productSalePrice)}"
                         : "",
                     textAlign: TextAlign.left,
                     style: const TextStyle(

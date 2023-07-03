@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grocery_flutter/pages/pay_momo_page.dart';
 import '/pages/favorite_page.dart';
 import '/pages/profile_page.dart';
 
@@ -18,7 +19,7 @@ class _DashboardPageState extends State<DashboardPage> {
     HomePage(),
     CartPage(),
     FavoritePage(),
-    ProfilePage(),
+    PayMomoPage(),
   ];
 
   int index = 0;

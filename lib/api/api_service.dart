@@ -23,9 +23,9 @@ class ApiService {
   static Map<String, String> requestHeaders = {
     'Content-Type': 'application/json'
   };
-  Future<List<Category>?> getCategories(Page, pageSize) async {
+  Future<List<Category>?> getCategories(page, pageSize) async {
     Map<String, String> queryString = {
-      'page': Page.toString(),
+      'page': page.toString(),
       'pageSize': pageSize.toString()
     };
 
@@ -149,7 +149,9 @@ class ApiService {
     var response = await client.get(url, headers: requestHeaders);
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body);
-
+      if(data==null){
+        return null;
+      }
       return Cart.fromJson(data["data"]);
     } else if (response.statusCode == 401) {
       navigatorKey.currentState?.pushNamedAndRemoveUntil(

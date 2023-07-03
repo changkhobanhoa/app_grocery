@@ -144,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(height: 10),
           Center(
             child: FormHelper.submitButton(
-              "Sign In",
+              "Đăng nhập",
               () {
                 if (validateAndSave()) {
                   setState(() {
@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                         FormHelper.showSimpleAlertDialog(
                           context,
                           Config.appName,
-                          "User Logged-In Successfully",
+                          "Đăng nhập thành công",
                           "Ok",
                           () {
                             Navigator.of(context).pop();
@@ -171,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                         FormHelper.showSimpleAlertDialog(
                           context,
                           Config.appName,
-                          "Invalid Email/Password",
+                          "Email hoặc password không đúng",
                           "Ok",
                           () {
                             Navigator.of(context).pop();
@@ -194,13 +194,13 @@ class _LoginPageState extends State<LoginPage> {
               text: TextSpan(
                 children: <TextSpan>[
                   const TextSpan(
-                    text: "Dont have an account?",
+                    text: "Bạn chưa có tài khoản?",
                     style: TextStyle(
                       color: Colors.black,
                     ),
                   ),
                   TextSpan(
-                    text: " Sign Up",
+                    text: " Đăng ký",
                     style: const TextStyle(
                       color: Colors.deepOrangeAccent,
                     ),

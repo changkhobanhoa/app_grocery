@@ -21,7 +21,7 @@ class _CartPageState extends ConsumerState<CartPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Cart"),
+        title: const Text("Giỏ hàng"),
       ),
       bottomNavigationBar: checkoutBottomNavbar(),
       body: Column(
@@ -97,7 +97,7 @@ class checkoutBottomNavbar extends ConsumerWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Tổng: ${cartProvider.cartModel!.grandTotal.toString()} ${Config.currency}",
+                      "Tổng: ${formatVnd(cartProvider.cartModel!.grandTotal)}",
                       style: const TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),

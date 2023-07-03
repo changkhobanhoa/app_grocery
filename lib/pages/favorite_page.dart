@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grocery_flutter/models/favorite.dart';
-import 'package:grocery_flutter/providers.dart';
-import 'package:grocery_flutter/widgets/widget_favorite_item.dart';
+import '/models/favorite.dart';
+import '/providers.dart';
+import '/widgets/widget_favorite_item.dart';
 
-import '../models/product.dart';
+ 
 
 class FavoritePage extends ConsumerStatefulWidget {
   const FavoritePage({super.key});
@@ -19,7 +19,7 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Favorite"),
+        title: const Text("Sản phẩm yêu thích"),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -56,10 +56,15 @@ class _FavoritePageState extends ConsumerState<FavoritePage> {
         physics: const ClampingScrollPhysics(),
         scrollDirection: Axis.vertical,
         itemCount: cardFavorite.length,
-        itemBuilder: ((context, index) {
+        itemBuilder: (context, index) {
           return FavoriteItemWidget(
             model: cardFavorite[index],
+            onItemRemove: (productId)   {
+              final favoriteModel = ref.read(favoriteItemProvider.notifier);
+                favoriteModel.removeFavoriteItem(productId);
+           
+            },
           );
-        }));
+        });
   }
 }

@@ -26,7 +26,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
     final orderPayment = ref.watch(orderPaymentProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Payment"),
+        title: const Text("Thanh toán"),
       ),
       body: ProgressHUD(
         key: UniqueKey(),
@@ -56,7 +56,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
               const Padding(
                 padding: EdgeInsets.only(left: 10),
                 child: Text(
-                  "Total Amount",
+                  "Tổng cộng",
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
@@ -69,7 +69,7 @@ class _PaymentPageState extends ConsumerState<PaymentPage> {
               Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: Text(
-                  "${cartProvider.cartModel!.grandTotal.toString()} ${Config.currency}",
+                  formatVnd(cartProvider.cartModel!.grandTotal),
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 25,

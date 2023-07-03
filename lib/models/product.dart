@@ -12,7 +12,7 @@ List<Product> productFromJson(dynamic str) =>
 abstract class Product with _$Product {
   factory Product({
     required String productName,
-    required Category category,
+    required Category? category,
     required String? productShortDescription,
     required String? productDescription,
     required double productPrice,
