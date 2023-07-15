@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_flutter/main.dart';
 import 'package:grocery_flutter/models/cart.dart';
 import 'package:grocery_flutter/models/favorite_user.dart';
-import 'package:grocery_flutter/models/user.model.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -109,7 +107,6 @@ class ApiService {
       return false;
     }
   }
-   
 
   Future<List<SliderModel>?> getSliders(page, pageSize) async {
     var url = Uri.http(
@@ -142,7 +139,6 @@ class ApiService {
       return null;
     }
   }
-   
 
   Future<Cart?> getCart() async {
     var loginDetails = await SharedService.loginDetails();
@@ -159,17 +155,30 @@ class ApiService {
       }
       return Cart.fromJson(data["data"]);
     } else if (response.statusCode == 401) {
-      const snackBar = SnackBar(
-        content: Text('Vui lòng đăng nhập để xem giỏ hàng'),
+      AlertDialog(
+        title: const Text("Thông báo"),
+        content: const Text('Bạn phải đăng nhập mới xem được'),
+        actions: [
+          TextButton(
+            onPressed: () =>
+                Navigator.pop(navigatorKey.currentContext!, 'Cancel'),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(
+                navigatorKey.currentContext!,
+                navigatorKey.currentState?.pushNamedAndRemoveUntil(
+                  "/login",
+                  (route) => false,
+                )),
+            child: const Text('OK'),
+          ),
+        ],
       );
 
 // Find the ScaffoldMessenger in the widget tree
 // and use it to show a SnackBar.
-      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(snackBar);
-      navigatorKey.currentState?.pushNamedAndRemoveUntil(
-        "/login",
-        (route) => false,
-      );
+    
     } else {
       return null;
     }

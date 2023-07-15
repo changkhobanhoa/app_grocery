@@ -23,15 +23,7 @@ class _ProductsPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-         flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [const Color.fromARGB(255, 58, 183, 137), Colors.purple.shade300],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
+        
         title: const Text("Sản phẩm"),
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
       ),
@@ -140,7 +132,6 @@ class _ProductList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final productState = ref.watch(productNotifierProvider);
-    final favorite = ref.watch(favoriteItemProvider);
 
     _scrollController.addListener(
       () {
@@ -179,26 +170,7 @@ class _ProductList extends ConsumerWidget {
                 children: List.generate(
                   productState.products.length,
                   (index) {
-                    int check = 0;
-                    favorite.favoriteModel!.favorites.map((e) {
-                      if (e.product.productId ==
-                          productState.products[index].productId) {
-                        check = 1;
-                      }
-                      ;
-                    });
                     return ProductCard(
-                      checkFavorite: check == 0
-                          ? const Icon(
-                              Icons.favorite,
-                              color: Colors.grey,
-                              size: 20,
-                            )
-                          : const Icon(
-                              Icons.favorite,
-                              color: Colors.red,
-                              size: 20,
-                            ),
                       model: productState.products[index],
                     );
                   },

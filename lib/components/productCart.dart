@@ -6,12 +6,10 @@ import '../models/product.dart';
 class ProductCard extends StatelessWidget {
   final Product? model;
   final Function? addFavorite;
-  final Widget checkFavorite;
   const ProductCard({
     super.key,
     this.model,
     this.addFavorite,
-    required this.checkFavorite,
   });
 
   @override
@@ -112,7 +110,7 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                       GestureDetector(
-                        child: checkFavorite,
+                        child: const Icon(Icons.favorite,color: Colors.grey,),
                         onTap: () {
                           addFavorite!(model!.productId);
                         },

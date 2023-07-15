@@ -15,7 +15,6 @@ import 'application/state/cart_state.dart';
 import 'application/state/product_state.dart';
 import 'models/category.dart';
 import 'models/pagination.dart';
-import 'models/user.model.dart';
 
 final categoriesProvider =
     FutureProvider.family<List<Category>?, PaginationModel>(

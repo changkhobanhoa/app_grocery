@@ -8,11 +8,15 @@ class FavoriteItemWidget extends StatelessWidget {
   final Favorite model;
   final Function? onItemRemove;
 
-  const FavoriteItemWidget({Key? key, required this.model, this.onItemRemove}) : super(key: key);
+  const FavoriteItemWidget({Key? key, required this.model, this.onItemRemove})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      shadowColor: Colors.grey,
+      color: Colors.white70,
+ 
       margin: const EdgeInsets.all(10),
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -21,18 +25,21 @@ class FavoriteItemWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Image.network(
+                
                 model.product.productImage != ""
                     ? model.product.fullImagePath
                     : "",
                 width: 80.0,
                 height: 80.0,
                 fit: BoxFit.contain,
+              
               ),
             ),
             Expanded(
               child: GestureDetector(
-                onTap: (){
-                  Navigator.pushNamed(context,"/product-details",arguments:{'productId':model.product.productId});
+                onTap: () {
+                  Navigator.pushNamed(context, "/product-details",
+                      arguments: {'productId': model.product.productId});
                 },
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +59,7 @@ class FavoriteItemWidget extends StatelessWidget {
                       child: Row(
                         children: [
                           Text(
-                            "${Config.currency}${model.product.productPrice.toString()}",
+                            formatVnd(model.product.productPrice),
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               fontSize: 18,
@@ -66,7 +73,7 @@ class FavoriteItemWidget extends StatelessWidget {
                           ),
                           Text(
                             (model.product.calculateDiscount > 0)
-                                ? " ${Config.currency}${model.product.productSalePrice.toString()}"
+                                ? " ${formatVnd(model.product.productSalePrice)}"
                                 : "",
                             textAlign: TextAlign.left,
                             style: const TextStyle(
@@ -82,9 +89,9 @@ class FavoriteItemWidget extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.remove),
+              icon: const Icon(Icons.delete, color: Colors.red,),
               onPressed: () {
-              onItemRemove!(model.product.productId);
+                onItemRemove!(model.product.productId);
               },
             ),
           ],

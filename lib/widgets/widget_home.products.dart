@@ -1,4 +1,3 @@
- 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:grocery_flutter/models/favorite.dart';
@@ -47,15 +46,10 @@ class HomeProductsWidget extends ConsumerWidget {
         ),
       ),
     );
-    final favorites = ref.watch(favoriteItemProvider);
 
     return products.when(
         data: (list) {
-          if (favorites==null) {
-            return _builProductList1(list!, ref);
-          }
-          return _builProductList(
-              list!, favorites.favoriteModel!.favorites, ref);
+          return _builProductList(list!, ref);
         },
         error: (_, __) {
           return const Center(child: Text("ERROR"));
@@ -63,7 +57,7 @@ class HomeProductsWidget extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()));
   }
 
-  Widget _builProductList1(List<Product> product, WidgetRef ref) {
+  Widget _builProductList(List<Product> product, WidgetRef ref) {
     return Container(
       height: 200,
       alignment: Alignment.centerLeft,
@@ -75,65 +69,14 @@ class HomeProductsWidget extends ConsumerWidget {
           var data = product[index];
 
           return GestureDetector(
-            onTap: () {},
-            child: ProductCard(
+              onTap: () {},
+              child: ProductCard(
                 model: data,
                 addFavorite: (productId) {
                   final favoriteModel = ref.read(favoriteItemProvider.notifier);
                   favoriteModel.addFavoriteItem(productId);
                 },
-                checkFavorite: const Icon(
-                  Icons.favorite,
-                  color: Colors.grey,
-                  size: 20,
-                )),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _builProductList(
-      List<Product> product, List<Favorite>? favorite, WidgetRef ref) {
-    return Container(
-      height: 200,
-      alignment: Alignment.centerLeft,
-      child: ListView.builder(
-        physics: const ClampingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        itemCount: product.length,
-        itemBuilder: (context, index) {
-          var data = product[index];
-          var check = 0;
-          if (favorite!.isEmpty) {
-          } else {
-            favorite.map((e) {
-              if (e.product.productId == data.productId) {
-                check = 1;
-              }
-            });
-          }
-          return GestureDetector(
-            onTap: () {},
-            child: ProductCard(
-              model: data,
-              addFavorite: (productId) {
-                final favoriteModel = ref.read(favoriteItemProvider.notifier);
-                favoriteModel.addFavoriteItem(productId);
-              },
-              checkFavorite: check == 0
-                  ? const Icon(
-                      Icons.favorite,
-                      color: Colors.grey,
-                      size: 20,
-                    )
-                  : const Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                      size: 20,
-                    ),
-            ),
-          );
+              ));
         },
       ),
     );

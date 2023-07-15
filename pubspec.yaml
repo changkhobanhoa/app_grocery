@@ -36,6 +36,7 @@ dependencies:
   fluttertoast: ^8.2.2
   vnpay_flutter: ^1.0.1
   rive:  ^0.7.23
+  flutter_platform_alert: ^0.4.0
 
 
 dev_dependencies:
