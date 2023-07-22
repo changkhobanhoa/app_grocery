@@ -31,6 +31,7 @@ mixin _$Product {
   String? get productType => throw _privateConstructorUsedError;
   String? get stackStatus => throw _privateConstructorUsedError;
   String get productId => throw _privateConstructorUsedError;
+  bool? get isFavorite => throw _privateConstructorUsedError;
   List<String>? get relatedProducts => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -55,6 +56,7 @@ abstract class $ProductCopyWith<$Res> {
       String? productType,
       String? stackStatus,
       String productId,
+      bool? isFavorite,
       List<String>? relatedProducts});
 
   $CategoryCopyWith<$Res>? get category;
@@ -84,6 +86,7 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
     Object? productType = freezed,
     Object? stackStatus = freezed,
     Object? productId = null,
+    Object? isFavorite = freezed,
     Object? relatedProducts = freezed,
   }) {
     return _then(_value.copyWith(
@@ -131,6 +134,10 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
           ? _value.productId
           : productId // ignore: cast_nullable_to_non_nullable
               as String,
+      isFavorite: freezed == isFavorite
+          ? _value.isFavorite
+          : isFavorite // ignore: cast_nullable_to_non_nullable
+              as bool?,
       relatedProducts: freezed == relatedProducts
           ? _value.relatedProducts
           : relatedProducts // ignore: cast_nullable_to_non_nullable
@@ -170,6 +177,7 @@ abstract class _$$_ProductCopyWith<$Res> implements $ProductCopyWith<$Res> {
       String? productType,
       String? stackStatus,
       String productId,
+      bool? isFavorite,
       List<String>? relatedProducts});
 
   @override
@@ -197,6 +205,7 @@ class __$$_ProductCopyWithImpl<$Res>
     Object? productType = freezed,
     Object? stackStatus = freezed,
     Object? productId = null,
+    Object? isFavorite = freezed,
     Object? relatedProducts = freezed,
   }) {
     return _then(_$_Product(
@@ -244,6 +253,10 @@ class __$$_ProductCopyWithImpl<$Res>
           ? _value.productId
           : productId // ignore: cast_nullable_to_non_nullable
               as String,
+      isFavorite: freezed == isFavorite
+          ? _value.isFavorite
+          : isFavorite // ignore: cast_nullable_to_non_nullable
+              as bool?,
       relatedProducts: freezed == relatedProducts
           ? _value._relatedProducts
           : relatedProducts // ignore: cast_nullable_to_non_nullable
@@ -267,6 +280,7 @@ class _$_Product implements _Product {
       required this.productType,
       required this.stackStatus,
       required this.productId,
+      required this.isFavorite,
       final List<String>? relatedProducts})
       : _relatedProducts = relatedProducts;
 
@@ -295,6 +309,8 @@ class _$_Product implements _Product {
   final String? stackStatus;
   @override
   final String productId;
+  @override
+  final bool? isFavorite;
   final List<String>? _relatedProducts;
   @override
   List<String>? get relatedProducts {
@@ -307,7 +323,7 @@ class _$_Product implements _Product {
 
   @override
   String toString() {
-    return 'Product(productName: $productName, category: $category, productShortDescription: $productShortDescription, productDescription: $productDescription, productPrice: $productPrice, productSalePrice: $productSalePrice, productImage: $productImage, productSKU: $productSKU, productType: $productType, stackStatus: $stackStatus, productId: $productId, relatedProducts: $relatedProducts)';
+    return 'Product(productName: $productName, category: $category, productShortDescription: $productShortDescription, productDescription: $productDescription, productPrice: $productPrice, productSalePrice: $productSalePrice, productImage: $productImage, productSKU: $productSKU, productType: $productType, stackStatus: $stackStatus, productId: $productId, isFavorite: $isFavorite, relatedProducts: $relatedProducts)';
   }
 
   @override
@@ -338,6 +354,8 @@ class _$_Product implements _Product {
                 other.stackStatus == stackStatus) &&
             (identical(other.productId, productId) ||
                 other.productId == productId) &&
+            (identical(other.isFavorite, isFavorite) ||
+                other.isFavorite == isFavorite) &&
             const DeepCollectionEquality()
                 .equals(other._relatedProducts, _relatedProducts));
   }
@@ -357,6 +375,7 @@ class _$_Product implements _Product {
       productType,
       stackStatus,
       productId,
+      isFavorite,
       const DeepCollectionEquality().hash(_relatedProducts));
 
   @JsonKey(ignore: true)
@@ -386,6 +405,7 @@ abstract class _Product implements Product {
       required final String? productType,
       required final String? stackStatus,
       required final String productId,
+      required final bool? isFavorite,
       final List<String>? relatedProducts}) = _$_Product;
 
   factory _Product.fromJson(Map<String, dynamic> json) = _$_Product.fromJson;
@@ -412,6 +432,8 @@ abstract class _Product implements Product {
   String? get stackStatus;
   @override
   String get productId;
+  @override
+  bool? get isFavorite;
   @override
   List<String>? get relatedProducts;
   @override

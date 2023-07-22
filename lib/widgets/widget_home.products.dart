@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:grocery_flutter/models/favorite.dart';
 
 import '../components/productCart.dart';
 import '../models/pagination.dart';
@@ -10,7 +9,7 @@ import '../providers.dart';
 
 class HomeProductsWidget extends ConsumerWidget {
   const HomeProductsWidget({super.key});
-
+ 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
@@ -75,7 +74,7 @@ class HomeProductsWidget extends ConsumerWidget {
                 addFavorite: (productId) {
                   final favoriteModel = ref.read(favoriteItemProvider.notifier);
                   favoriteModel.addFavoriteItem(productId);
-                },
+                }, isFavorite: data.isFavorite!,
               ));
         },
       ),

@@ -26,22 +26,15 @@ class _RegisterState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
+       child: Scaffold(
         backgroundColor: Colors.white,
         body: ProgressHUD(
-          key: UniqueKey(),
           inAsyncCall: isAsyncCallProcess,
-          opacity: 3,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.only(top: 60, bottom: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Form(key: globalKey, child: _registerUI(context)),
-              ],
-            ),
+          opacity: 0.3,
+          key: UniqueKey(),
+          child: Form(
+            key: globalKey,
+            child: _registerUI(context),
           ),
         ),
       ),

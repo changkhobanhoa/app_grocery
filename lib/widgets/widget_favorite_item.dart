@@ -64,9 +64,9 @@ class FavoriteItemWidget extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 18,
                               color: model.product.calculateDiscount > 0
-                                  ? Colors.red
-                                  : Colors.black,
-                              decoration: model.product.productSalePrice > 0
+                                  ? Colors.black
+                                  : Colors.red,
+                              decoration: model.product.calculateDiscount > 0
                                   ? TextDecoration.lineThrough
                                   : null,
                             ),
@@ -78,7 +78,7 @@ class FavoriteItemWidget extends StatelessWidget {
                             textAlign: TextAlign.left,
                             style: const TextStyle(
                                 fontSize: 20,
-                                color: Colors.black,
+                                color: Colors.red,
                                 fontWeight: FontWeight.bold),
                           ),
                         ],

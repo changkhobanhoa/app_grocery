@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +12,9 @@ import 'package:http/http.dart' as http;
 
 import '../config.dart';
 import '../models/category.dart';
+import '../models/chat_model.dart';
 import '../models/login_response_model.dart';
+import '../models/models_model.dart';
 import '../models/order_payment.dart';
 import '../models/product.dart';
 import '../models/product_filter.dart';
@@ -39,6 +43,23 @@ class ApiService {
       return categoriesFromJson(data["data"]);
     } else {
       return null;
+    }
+  }
+
+  static Future<String> getNameProducts() async {
+    var url = Uri.http(Config.apiURL, Config.productApi);
+    var response = await client.get(url, headers: requestHeaders);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+
+      var maping = data['data'];
+      var s = "Trong cửa hàng của tôi có : ";
+      for (var item in maping) {
+        s += item['productName'] + ", ";
+      }
+      return s;
+    } else {
+      return "";
     }
   }
 
@@ -178,7 +199,6 @@ class ApiService {
 
 // Find the ScaffoldMessenger in the widget tree
 // and use it to show a SnackBar.
-    
     } else {
       return null;
     }
@@ -237,6 +257,14 @@ class ApiService {
       ),
     );
     if (response.statusCode == 200) {
+      final snackBar = SnackBar(
+        content: const Text('Đã xoá!'),
+        action: SnackBarAction(
+          label: 'Oke',
+          onPressed: () {},
+        ),
+      );
+      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(snackBar);
       return true;
     } else if (response.statusCode == 401) {
       navigatorKey.currentState?.pushNamedAndRemoveUntil(
@@ -351,6 +379,14 @@ class ApiService {
       ),
     );
     if (response.statusCode == 200) {
+      final snackBar = SnackBar(
+        content: const Text('Đã yêu thích!'),
+        action: SnackBarAction(
+          label: 'Oke',
+          onPressed: () {},
+        ),
+      );
+      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(snackBar);
       return "Success";
     } else if (response.statusCode == 401) {
       navigatorKey.currentState?.pushNamedAndRemoveUntil(
@@ -359,6 +395,14 @@ class ApiService {
       );
     } else {
       var data = jsonDecode(response.body);
+      final snackBar = SnackBar(
+        content: Text(data['message']),
+        action: SnackBarAction(
+          label: 'Oke',
+          onPressed: () {},
+        ),
+      );
+      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(snackBar);
       return data['message'];
     }
     return null;
@@ -381,8 +425,24 @@ class ApiService {
       ),
     );
     if (response.statusCode == 200) {
+      final snackBar = SnackBar(
+        content: const Text('Đã xoá!'),
+        action: SnackBarAction(
+          label: 'Oke',
+          onPressed: () {},
+        ),
+      );
+      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(snackBar);
       return true;
     } else if (response.statusCode == 401) {
+      final snackBar = SnackBar(
+        content: const Text('Bạn phải đăng nhập để xem!'),
+        action: SnackBarAction(
+          label: 'Oke',
+          onPressed: () {},
+        ),
+      );
+      ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(snackBar);
       navigatorKey.currentState?.pushNamedAndRemoveUntil(
         "/login",
         (route) => false,
@@ -391,5 +451,72 @@ class ApiService {
       return null;
     }
     return null;
+  }
+
+  static Future<List<ModelsModel>> getModels() async {
+    try {
+      var response = await http.get(
+        Uri.parse("$Config.BASE_URL/models"),
+        headers: {'Authorization': 'Bearer $Config.API_KEY'},
+      );
+
+      Map jsonResponse = jsonDecode(response.body);
+
+      if (jsonResponse['error'] != null) {
+        // print("jsonResponse['error'] ${jsonResponse['error']["message"]}");
+        throw HttpException(jsonResponse['error']["message"]);
+      }
+      // print("jsonResponse $jsonResponse");
+      List temp = [];
+      for (var value in jsonResponse["data"]) {
+        temp.add(value);
+        // log("temp ${value["id"]}");
+      }
+      return ModelsModel.modelsFromSnapshot(temp);
+    } catch (error) {
+      log("error $error");
+      rethrow;
+    }
+  }
+
+  // Send Message fct
+  static Future<ChatModel> sendMessage({required String message}) async {
+    try {
+      var response = await http.post(
+        Uri.parse("https://api.openai.com/v1/completions"),
+        headers: {
+          'Authorization': 'Bearer ${Config.API_KEY}',
+          "Content-Type": "application/json ;charset=utf-8"
+        },
+        body: jsonEncode(
+          {
+            "model": "text-davinci-003",
+            "prompt": message,
+            "temperature": 0,
+            "max_tokens": 2000,
+            "top_p": 1,
+            "frequency_penalty": 0.0,
+            "presence_penalty": 0.0
+          },
+        ),
+      );
+
+      String responseBody = utf8.decode(response.bodyBytes);
+      Map<String, dynamic> jsonResponse = json.decode(responseBody);
+
+      if (jsonResponse['error'] != null) {
+        throw HttpException(jsonResponse['error']["message"]);
+      }
+      String text = jsonResponse['choices'][0]['text']
+          .toString()
+          .trim()
+          .replaceAll('\\n\\n', '');
+      ChatModel chatList = ChatModel(msg: text, chatIndex: 0);
+
+      return chatList;
+    } catch (error) {
+      log("error $error");
+      rethrow;
+    }
   }
 }

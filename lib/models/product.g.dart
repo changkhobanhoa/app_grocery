@@ -20,6 +20,7 @@ _$_Product _$$_ProductFromJson(Map<String, dynamic> json) => _$_Product(
       productType: json['productType'] as String?,
       stackStatus: json['stackStatus'] as String?,
       productId: json['productId'] as String,
+      isFavorite: json['isFavorite'] as bool?,
       relatedProducts: (json['relatedProducts'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -38,5 +39,6 @@ Map<String, dynamic> _$$_ProductToJson(_$_Product instance) =>
       'productType': instance.productType,
       'stackStatus': instance.stackStatus,
       'productId': instance.productId,
+      'isFavorite': instance.isFavorite,
       'relatedProducts': instance.relatedProducts,
     };

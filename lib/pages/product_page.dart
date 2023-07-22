@@ -17,15 +17,19 @@ class ProductPage extends StatefulWidget {
 class _ProductsPageState extends State<ProductPage> {
   String? categoryId;
   String? categoryName;
-  final TextEditingController _searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        
         title: const Text("Sản phẩm"),
-        actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                showSearch(context: context, delegate: DataSearch());
+              },
+              icon: const Icon(Icons.search))
+        ],
       ),
       body: Container(
         color: Colors.grey[100],
@@ -128,7 +132,7 @@ class _ProductFilter extends ConsumerWidget {
 
 class _ProductList extends ConsumerWidget {
   final ScrollController _scrollController = ScrollController();
-
+ 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final productState = ref.watch(productNotifierProvider);
@@ -171,7 +175,13 @@ class _ProductList extends ConsumerWidget {
                   productState.products.length,
                   (index) {
                     return ProductCard(
+                      addFavorite: (productId) {
+                        final favoriteModel =
+                            ref.read(favoriteItemProvider.notifier);
+                        favoriteModel.addFavoriteItem(productId);
+                      },
                       model: productState.products[index],
+                      isFavorite: productState.products[index].isFavorite!,
                     );
                   },
                 ),
@@ -188,5 +198,34 @@ class _ProductList extends ConsumerWidget {
             )
           ],
         ));
+  }
+}
+
+class DataSearch extends SearchDelegate {
+  @override
+  List<Widget>? buildActions(BuildContext context) => [
+        IconButton(
+            onPressed: () {
+              print(query);
+              if (query.isEmpty) {
+                close(context, "");
+              } else {
+                query = "";
+              }
+            },
+            icon: const Icon(Icons.clear))
+      ];
+  @override
+  Widget? buildLeading(BuildContext context) => IconButton(
+      onPressed: () => close(context, ""), icon: const Icon(Icons.arrow_back));
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return Container();
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return Container();
   }
 }

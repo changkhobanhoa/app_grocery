@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../components/productCart.dart';
-import '../models/favorite.dart';
 import '../models/pagination.dart';
 import '../models/product.dart';
 import '../models/product_filter.dart';
@@ -78,7 +77,7 @@ class RelatedProductWidget extends ConsumerWidget {
                 await favoriteModel.addFavoriteItem(productId);
                 final favoriteState = ref.watch(favoriteItemProvider);
                 favoriteState.err != null ? "" : "";
-              },
+              }, isFavorite: data.isFavorite!,
             ),
           );
         },

@@ -12,12 +12,13 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green.shade400,
         centerTitle: true,
         title: const Text("Trang Chủ"),
         actions: [
           IconButton(
             onPressed: () {
-                  SharedService.logout(context);
+              SharedService.logout(context);
             },
             icon: const Icon(Icons.logout),
           )
@@ -28,7 +29,6 @@ class HomePage extends StatelessWidget {
           HomeSliderWidget(),
           HomeCategoriesWidget(),
           HomeProductsWidget(),
-          
         ],
       ),
     );
